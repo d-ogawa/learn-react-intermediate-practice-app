@@ -4,10 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { Box, Flex, Heading, Link, useDisclosure } from "@chakra-ui/react";
 import { MenuIconButton } from "../../atoms/button/MenuIconButton";
 import { MenuDrawer } from "../../molecules/MenuDrawer";
+import { useLoginUser } from "../../../hooks/useLoginUser";
 
 export const Header: VFC = memo(() => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
+  const { setLoginUser } = useLoginUser();
 
   const onClickHome = useCallback(() => {
     navigate("/home");
@@ -19,6 +21,11 @@ export const Header: VFC = memo(() => {
   }, []);
   const onClickSetting = useCallback(() => {
     navigate("/home/setting");
+    onClose();
+  }, []);
+  const onClickLogout = useCallback(() => {
+    setLoginUser(null);
+    navigate("/");
     onClose();
   }, []);
 
@@ -52,8 +59,11 @@ export const Header: VFC = memo(() => {
           <Box pr={4}>
             <Link onClick={onClickUserManagement}>ユーザー一覧</Link>
           </Box>
-          <Box>
+          <Box pr={4}>
             <Link onClick={onClickSetting}>設定</Link>
+          </Box>
+          <Box pr={4}>
+            <Link onClick={onClickLogout}>ログアウト</Link>
           </Box>
         </Flex>
         <MenuIconButton onOpen={onOpen} />
@@ -64,6 +74,7 @@ export const Header: VFC = memo(() => {
         onClickHome={onClickHome}
         onClickUserManagement={onClickUserManagement}
         onClickSetting={onClickSetting}
+        onClickLogout={onClickLogout}
       />
     </>
   );
